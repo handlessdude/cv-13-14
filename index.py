@@ -44,9 +44,10 @@ def main():
         st.image(up_file)
         img = Image.open(up_file).convert("RGB")
 
-        paths = db.iloc[
-            knn_model.kneighbors([get_embedding(np.array(img))])[1][0]
-        ]['img_path'].head(N_NEIGHBOURS).values
+        predictions = knn_model.kneighbors([get_embedding(np.array(img))])
+        # print(predictions)  # ([array_of_distances], [array_of_img_indices])
+        paths = db.iloc[predictions[1][0]]['img_path'].head(N_NEIGHBOURS).values
+
         for i in range(N_NEIGHBOURS):
             st.image(Image.open(paths[i]), width=580)
 
